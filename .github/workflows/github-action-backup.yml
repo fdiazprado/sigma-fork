@@ -27,14 +27,14 @@ jobs:
           git checkout upstream/master -- rules
           git checkout upstream/master -- rules-emerging-threats
           git checkout upstream/master -- rules-threat-hunting
-     - name: Use rsync to update directories
-       run: |
-         rsync -a --delete rules/ ../rules/
-         rsync -a --delete rules-emerging-threats/ ../rules-emerging-threats/
-         rsync -a --delete rules-threat-hunting/ ../rules-threat-hunting/
-     - name: Push changes
-       run: |
-         git push origin master
+      - name: Use rsync to update directories
+        run: |
+          rsync -a --delete rules/ ../rules/
+          rsync -a --delete rules-emerging-threats/ ../rules-emerging-threats/
+          rsync -a --delete rules-threat-hunting/ ../rules-threat-hunting/
+      - name: Push changes
+        run: |
+          git push origin master
 
   script-new-rules:
     needs: pull-recent-additions
