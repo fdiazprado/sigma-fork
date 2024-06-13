@@ -1,0 +1,114 @@
+name: Fetch Upstream Changes
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at midnight (UTC)
+  workflow_dispatch:
+
+jobs:
+  pull-recent-additions:
+    name: Pull-Additions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Add upstream remote
+        run: git remote add upstream "https://github.com/SigmaHQ/sigma.git"
+
+      - name: Fetch Upstream Changes
+        run: |
+          git fetch upstream master 
+          git checkout origin/master
+          
+      - name: Pull specific directories from upstream
+        run: |
+          git fetch upstream
+          git checkout upstream/master -- rules
+          git checkout upstream/master -- rules-emerging-threats
+          git checkout upstream/master -- rules-threat-hunting
+     - name: Use rsync to update directories
+       run: |
+         rsync -a --delete rules/ ../rules/
+         rsync -a --delete rules-emerging-threats/ ../rules-emerging-threats/
+         rsync -a --delete rules-threat-hunting/ ../rules-threat-hunting/
+     - name: Push changes
+       run: |
+         git push origin master
+
+  script-new-rules:
+    needs: pull-recent-additions
+    name: Bash Script New Rules
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Show Directory
+        run: ls
+
+      - name: Install Git
+        run: sudo apt-get update && sudo apt-get install -y git
+
+      - name: Verify Git installation
+        run: git --version
+
+      - name: Install yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y software-properties-common
+          sudo add-apt-repository -y ppa:rmescandon/yq
+          sudo apt-get update
+          sudo apt-get install -y yq
+
+      - name: Verify yq installation
+        run: yq --version
+
+      - name: Make script executable
+        run: |
+          cd .github/script/
+          ls
+          chmod +x ./review-rules.sh
+
+      - name: Run bash script
+        id: run_script
+        run: |
+          cd .github/script/
+          #!/bin/bash
+          ./review-rules.sh  
+
+      - name: Print Out Content
+        run: |
+          cd .github/script/
+          data=$(cat out.txt)
+          json_data=$(echo "$data" | sed '$!s/}$/},/')
+      
+          # Enclose all JSON objects within an array
+          json_data="[${json_data}]"
+      
+          # Output the modified JSON data 
+          
+          curl --verbose --request POST \
+              --url https://serene-star-7723.tines.com/webhook/a8decde62d02ffae60a324f827cbde0b/fee9bbbeef472c09302e3c312ffd36bc \
+              --header "Secret: ${{ secrets.TINES_API }}" \
+              --header "Content-Type: application/json" \
+              --data "$json_data"
+  
+
+          
+
+        
+#
+
+
+      #- name: Give Execute Permissions
+      #  run: chmod +x .github/workflows/review-rules.sh
+#
+      #- name: Run Script
+      #  shell: bash
+      #  run: |
+      #    output=$(.github/workflows/review-rules.sh)
+      #    echo "$output"
+
+ 
+        
