@@ -98,6 +98,8 @@ jobs:
             echo "fileExist=$fileExist" >> $GITHUB_ENV
           fi
 
+          echo "$fileExist"
+
       - name: Print Out Content
         if: ${{ env.fileExist == 'true' }}
         run: |
