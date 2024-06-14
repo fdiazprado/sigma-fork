@@ -83,7 +83,6 @@ jobs:
           ls
           cd sigma-fork/.github/script/
           ls
-          #!/bin/bash
           ./review-rules.sh  
 
       - name: Print Out Content
