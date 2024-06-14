@@ -12,6 +12,8 @@ analyze_directories() {
     TARGET_DIR=$(realpath "$SCRIPT_DIR/../..")
     current_datetime=$(date -u +"%Y-%m-%d")
     since_date=$(date -u -d "-8 days" +"%Y-%m-%d")
+    echo "Date Now: $current_datetime" >&2
+    echo "Date Since: $since_date" >&2
     # Initialize data array holder that will be sent to Tines
     declare -a data_array
     for path in "${selected_paths[@]}"; do
@@ -27,7 +29,8 @@ analyze_directories() {
         #while IFS= read -r line; do
         #    git_array+=("$line")
         #done < <(git -C "$TARGET_DIR" log --pretty=format: --name-only --since="$since_date" -- "$folder_path")
-        gitInfo=$(git -C "$TARGET_DIR" log --pretty=format: --name-only --since="$since_date" -- "$folder_path")
+        echo "folder path: $folder_path" >&2
+        gitInfo=$(git -C "$TARGET_DIR" log --pretty=format: --name-only --since=$since_date --until=$current_datetime -- "$folder_path")
         for dir in $gitInfo; do
             git_array+=("$dir")
         done
