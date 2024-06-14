@@ -71,6 +71,10 @@ jobs:
       - name: Verify yq installation
         run: yq --version
 
+      - name: Install dos2unix
+        run: |
+          sudo apt-get install dos2unix
+
       - name: Make script executable
         run: |
           cd sigma-fork/.github/script/
@@ -83,6 +87,7 @@ jobs:
           ls
           cd sigma-fork/.github/script/
           ls
+          dos2unix review-rules.sh
           ./review-rules.sh  
 
       - name: Print Out Content
