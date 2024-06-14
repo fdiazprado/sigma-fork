@@ -11,7 +11,7 @@ analyze_directories() {
     # Navigate to the parent directory of the script directory
     TARGET_DIR=$(realpath "$SCRIPT_DIR/../..")
     current_datetime=$(date -u +"%Y-%m-%d")
-    since_date=$(date -u -d "-8 days" +"%Y-%m-%d")
+    since_date=$(date -u -d "-15 days" +"%Y-%m-%d")
     echo "Date Now: $current_datetime" >&2
     echo "Date Since: $since_date" >&2
     # Initialize data array holder that will be sent to Tines
