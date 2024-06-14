@@ -59,7 +59,6 @@ jobs:
         run: |
           git clone "https://github.com/fdiazprado/sigma-fork.git"
           ls
-          $(pwd)
 
       - name: Install yq
         run: |
@@ -74,20 +73,20 @@ jobs:
 
       - name: Make script executable
         run: |
-          cd .github/script/
+          cd sigma-fork/.github/script/
           ls
           chmod +x ./review-rules.sh
 
       - name: Run bash script
         id: run_script
         run: |
-          cd .github/script/
+          cd sigma-fork/.github/script/
           #!/bin/bash
           ./review-rules.sh  
 
       - name: Print Out Content
         run: |
-          cd .github/script/
+          cd sigma-fork/.github/script/
           data=$(cat out.txt)
           json_data=$(echo "$data" | sed '$!s/}$/},/')
       
