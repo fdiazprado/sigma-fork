@@ -58,7 +58,9 @@ jobs:
       - name: Clone Branch Repo
         run: |
           git clone "https://github.com/fdiazprado/sigma-fork.git"
-          
+          ls
+          $(pwd)
+
       - name: Install yq
         run: |
           sudo apt-get update
