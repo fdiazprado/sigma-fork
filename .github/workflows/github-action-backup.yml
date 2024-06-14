@@ -55,6 +55,8 @@ jobs:
           git --version
           list=$(git config --list)
           echo "$list"
+          git config --global core.autocrlf true
+          git config --global core.filemode false
 
       - name: Install yq
         run: |
