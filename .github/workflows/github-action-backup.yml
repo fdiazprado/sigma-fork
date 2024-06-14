@@ -80,7 +80,9 @@ jobs:
       - name: Run bash script
         id: run_script
         run: |
+          ls
           cd sigma-fork/.github/script/
+          ls
           #!/bin/bash
           ./review-rules.sh  
 
