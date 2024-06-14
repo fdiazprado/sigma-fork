@@ -89,8 +89,17 @@ jobs:
           ls
           dos2unix review-rules.sh
           ./review-rules.sh  
+          if [ -f "$filename" ]; then
+            fileExist=true
+            echo "fileExist=$fileExist" >> $GITHUB_ENV
+            
+          else
+            fileExist=false
+            echo "fileExist=$fileExist" >> $GITHUB_ENV
+          fi
 
       - name: Print Out Content
+        if: ${{ env.fileExist == 'true' }}
         run: |
           cd sigma-fork/.github/script/
           data=$(cat out.txt)
