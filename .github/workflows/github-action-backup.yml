@@ -89,7 +89,8 @@ jobs:
           ls
           dos2unix review-rules.sh
           ./review-rules.sh  
-          if [ -f "$filename" ]; then
+          ls
+          if [ -f "out.txt" ]; then
             fileExist=true
             echo "fileExist=$fileExist" >> $GITHUB_ENV
             
