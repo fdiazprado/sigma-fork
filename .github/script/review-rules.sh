@@ -96,7 +96,9 @@ analyze_directories() {
 
     # Check if the array is empty if so do nothing - add check in action yml file to halt pipeline if nothing new to add
     if [ ${#data_array[@]} -eq 0 ]; then
-        echo "The array is empty."
+        echo "The array is empty." >&2
+        check=${#data_array[@]} 
+        echo "Check is $check" >&2
     else
         # Loop through entries and append to file. This will allow us to access the file and manipulate the json array further
         for entry in "${data_array[@]}"; do
