@@ -40,10 +40,7 @@ jobs:
     needs: pull-recent-additions
     name: Bash Script New Rules
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
+    steps:      
       - name: Show Directory
         run: ls
 
@@ -58,6 +55,10 @@ jobs:
           git config --global core.autocrlf true
           git config --global core.filemode false
 
+      - name: Clone Branch Repo
+        run: |
+          git clone "https://github.com/fdiazprado/sigma-fork.git"
+          
       - name: Install yq
         run: |
           sudo apt-get update
