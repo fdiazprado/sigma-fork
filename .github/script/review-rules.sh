@@ -9,6 +9,7 @@ analyze_directories() {
 
     #Set up sigma cli
     sigma plugin install elasticsearch
+    sigma plugin install sysmon
 
     # Get the current working directory of the script
     SCRIPT_DIR=$(pwd)
