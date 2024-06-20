@@ -19,7 +19,7 @@ analyze_directories() {
 
     # Set date times to limit the commit searching
     current_datetime=$(date -u +"%Y-%m-%d")
-    since_date=$(date -u -d "-20 days" +"%Y-%m-%d")
+    since_date=$(date -u -d "-30 days" +"%Y-%m-%d")
     echo "Date Now: $current_datetime" >&2
     echo "Date Since: $since_date" >&2
 
@@ -69,6 +69,8 @@ analyze_directories() {
                     description=$(yq e '.references' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content")
+
+                    echo "$title" >&2
 
                     #Invoke sigma-cli from bash
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
