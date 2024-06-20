@@ -7,6 +7,9 @@ analyze_directories() {
         "rules-emerging-threats"
     )
 
+    #Set up sigma cli
+    sigma plugin install elasticsearch
+
     # Get the current working directory of the script
     SCRIPT_DIR=$(pwd)
 
@@ -67,7 +70,6 @@ analyze_directories() {
                     logsource=$(yq e '.logsource | tojson' "$file_content")
 
                     #Invoke sigma-cli from bash
-                    sigma plugin install elasticsearch
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
 
                     # Format the extracted fields into json object
