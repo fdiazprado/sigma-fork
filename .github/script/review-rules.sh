@@ -15,7 +15,7 @@ analyze_directories() {
 
     # Set date times to limit the commit searching
     current_datetime=$(date -u +"%Y-%m-%d")
-    since_date=$(date -u -d "-15 days" +"%Y-%m-%d")
+    since_date=$(date -u -d "-20 days" +"%Y-%m-%d")
     echo "Date Now: $current_datetime" >&2
     echo "Date Since: $since_date" >&2
 
@@ -67,6 +67,7 @@ analyze_directories() {
                     logsource=$(yq e '.logsource | tojson' "$file_content")
 
                     #Invoke sigma-cli from bash
+                    sigma plugin install elasticsearch
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
 
                     # Format the extracted fields into json object
