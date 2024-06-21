@@ -66,7 +66,7 @@ analyze_directories() {
                     author=$(yq e '.author' "$file_content")
                     status=$(yq e '.status' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references' "$file_content")
+                    references=$(yq e '.references | tojson' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content")
 
@@ -77,7 +77,7 @@ analyze_directories() {
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
 
                     # Format the extracted fields into json object
-                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg description "$description" --args references "$references" --arg date_modified "$date_modified"  --arg logsource "$logsource"  --args query "$query"'
+                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg description "$description" --argjson references "$references" --arg date_modified "$date_modified"  --arg logsource "$logsource"  --args query "$query"'
                       {
                         "title": $title,
                         "id": $id,
