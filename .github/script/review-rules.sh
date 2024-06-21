@@ -66,7 +66,7 @@ analyze_directories() {
                     author=$(yq e '.author' "$file_content")
                     status=$(yq e '.status' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references' "$file_content")
+                    references=$(yq e '.references' "$file_content" | jq -R 'split("\n") | map(select(. != ""))')
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content")
 
