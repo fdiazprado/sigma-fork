@@ -90,16 +90,27 @@ analyze_directories() {
                     echo "query: $query"
 
                     # Format the extracted fields into json object
-                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg severity "$severity" --arg description "$description"'
-                      {
-                        "title": "$title",
-                        "id": "$id",
-                        "author": "$author",
-                        "status": "$status",
-                        "severity": "$severity",
-                        "description": "$description"
-                      }'
+                    data_entry=$(jq -n \
+                        --arg title "$title" \
+                        --arg id "$id" \
+                        --arg author "$author" \
+                        --arg status "$status" \
+                        --arg severity "$severity" \
+                        --arg description "$description" \
+                        --argjson references: "$references" \
+                        --arg date_modified: "$date_mofidied" \
+                        --argjson logsource: "$logsource" \
+                        --arg query: "$query" \
+                        '{ 
+                           "title": $title, 
+                           "id": $id, 
+                           "author": $author, 
+                           "status": $status, 
+                           "severity": $severity, 
+                           "description": $description 
+                         }'
                     )
+                    
 
                     #data_test="{ \"title\": "$title", \"id\": "$id", \"author\": "$author", \"status\": "$status", \"description\": "$description", \"references\": "$references",\"date_modified\": "$date_modified", \"logsource\": "$logsource", \"query\": "$query" }"
                     
