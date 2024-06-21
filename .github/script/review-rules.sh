@@ -97,10 +97,10 @@ analyze_directories() {
                         --arg status "$status" \
                         --arg severity "$severity" \
                         --arg description "$description" \
-                        --argjson references: "$references" \
-                        --arg date_modified: "$date_mofidied" \
-                        --argjson logsource: "$logsource" \
-                        --arg query: "$query" \
+                        --argjson references: $references \
+                        --arg date_modified: "$date_modified" \
+                        --argjson logsource: $logsource \
+                        --arg query: $query \
                         '{ 
                            "title": $title, 
                            "id": $id, 
