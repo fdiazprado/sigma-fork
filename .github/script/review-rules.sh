@@ -72,6 +72,7 @@ analyze_directories() {
 
                     echo "$title" >&2
                     echo "references lol: $references"
+                    echo "logsources: $logsources"
 
                     #Invoke sigma-cli from bash
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f default $file_content)
@@ -91,6 +92,10 @@ analyze_directories() {
                         "query": $query
                       }'
                     )
+
+                    data_test='{ "title": $title, "id": $id, "author": $author, "status": $status, "description": $description, "references": $references, "date_modified": $date_modified, "logsource": $logsource, "query": $query }'
+                    
+                    echo "DATATEST: $data_test"
 
                     echo "$data_entry" >&2
 
