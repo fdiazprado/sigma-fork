@@ -65,26 +65,38 @@ analyze_directories() {
                     id=$(yq e '.id' "$file_content")
                     author=$(yq e '.author' "$file_content")
                     status=$(yq e '.status' "$file_content")
+                    severity=$(yq e '.level' "$file_content")
                     description=$(yq e '.description' "$file_content")
                     references=$(yq e '.references | tojson' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content")
+                    
 
-                    echo "$title" >&2
-                    echo "references lol: $references"
-                    echo "logsources: $logsources"
+
+                    
 
                     #Invoke sigma-cli from bash
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f default $file_content)
-                    echo "Query: $query" >&2
+                    
+                    echo "title: $title"
+                    echo "id: $id"
+                    echo "author: $author"
+                    echo "status: $status"
+                    echo "severity: $severity"
+                    echo "description: $description"
+                    echo "references: $references"
+                    echo "date_modified: $date_modified"
+                    echo "logsource: $logsource"
+                    echo "query: $query"
 
                     # Format the extracted fields into json object
-                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg description "$description" --argjson references "$references" --arg date_modified "$date_modified"  --arg logsource "$logsource"  --arg query "$query"'
+                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg status "$severity" --arg description "$description" --argjson references "$references" --arg date_modified "$date_modified"  --arg logsource "$logsource"  --arg query "$query"'
                       {
                         "title": $title,
                         "id": $id,
                         "author": $author,
                         "status": $status,
+                        "severity": $severity,
                         "description": $description,
                         "references": $references,
                         "date_modified": $date_modified,
@@ -93,9 +105,9 @@ analyze_directories() {
                       }'
                     )
 
-                    data_test="{ \"title\": $title, \"id\": $id, \"author\": $author, \"status\": $status, \"description\": $description, \"references\": $references,\"date_modified\": $date_modified, \"logsource\": $logsource, \"query\": $query }"
+                    #data_test="{ \"title\": "$title", \"id\": "$id", \"author\": "$author", \"status\": "$status", \"description\": "$description", \"references\": "$references",\"date_modified\": "$date_modified", \"logsource\": "$logsource", \"query\": "$query" }"
                     
-                    echo "DATATEST: $data_test"
+                    #echo "DATATEST: $data_test"
 
                     echo "$data_entry" >&2
 
