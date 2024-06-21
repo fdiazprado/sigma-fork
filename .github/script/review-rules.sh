@@ -66,11 +66,12 @@ analyze_directories() {
                     author=$(yq e '.author' "$file_content")
                     status=$(yq e '.status' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references' "$file_content" | jq -R 'split("\n") | map(select(. != ""))')
+                    references=$(yq e '.references' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content")
 
                     echo "$title" >&2
+                    echo "references lol: $references"
 
                     #Invoke sigma-cli from bash
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
