@@ -67,9 +67,9 @@ analyze_directories() {
                     status=$(yq e '.status' "$file_content")
                     severity=$(yq e '.level' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references | tojson' "$file_content")
+                    references=$(yq e '.references' "$file_content" | jq -c '.')
                     date_modified=$(yq e '.modified' "$file_content")
-                    logsource=$(yq e '.logsource | tojson' "$file_content")
+                    logsource=$(yq e '.logsource' "$file_content" | jq -c '.')
                     
 
 
@@ -97,10 +97,10 @@ analyze_directories() {
                         --arg status "$status" \
                         --arg severity "$severity" \
                         --arg description "$description" \
-                        --argjson references: $references \
-                        --arg date_modified: "$date_modified" \
-                        --argjson logsource: $logsource \
-                        --arg query: $query \
+                        --argjson references "$references" \
+                        --arg date_modified "$date_modified" \
+                        --argjson logsource "$logsource" \
+                        --arg query "$query" \
                         '{ 
                            "title": $title, 
                            "id": $id, 
