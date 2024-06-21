@@ -93,7 +93,7 @@ analyze_directories() {
                       }'
                     )
 
-                    data_test='{ "title": $title, "id": $id, "author": $author, "status": $status, "description": $description, "references": $references, "date_modified": $date_modified, "logsource": $logsource, "query": $query }'
+                    data_test="{ "title": $title, "id": $id, "author": $author, "status": $status, "description": $description, "references": $references, "date_modified": $date_modified, "logsource": $logsource, "query": $query }"
                     
                     echo "DATATEST: $data_test"
 
