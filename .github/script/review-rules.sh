@@ -74,7 +74,7 @@ analyze_directories() {
                     echo "references lol: $references"
 
                     #Invoke sigma-cli from bash
-                    query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
+                    query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f default $file_content)
                     echo "Query: $query" >&2
 
                     # Format the extracted fields into json object
