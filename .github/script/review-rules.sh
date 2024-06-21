@@ -90,24 +90,25 @@ analyze_directories() {
                     echo "query: $query"
 
                     # Format the extracted fields into json object
-                    data_entry=$(jq -n \
-                        --arg title "$title" \
-                        --arg id "$id" \
-                        --arg author "$author" \
-                        --arg status "$status" \
-                        --arg severity "$severity" \
-                        --arg description "$description" \
-                        '{ 
-                           "title": $title, 
-                           "id": $id, 
-                           "author": $author, 
-                           "status": $status, 
-                           "severity": $severity, 
-                           "description": $description 
-                         }'
+                    data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg status "$severity" --arg description "$description" --argjson references "$references" --arg date_modified "$date_modified"  --argjson logsource "$logsource"  --arg query "$query"'
+                      {
+                        "title": "$title",
+                        "id": "$id",
+                        "author": "$author",
+                        "status": "$status",
+                        "severity": "$severity",
+                        "description": "$description",
+                        "references": "$references",
+                        "date_modified": "$date_modified",
+                        "logsource": "$logsource",
+                        "query": "$query"
+                      }'
                     )
 
-                
+                    #data_test="{ \"title\": "$title", \"id\": "$id", \"author\": "$author", \"status\": "$status", \"description\": "$description", \"references\": "$references",\"date_modified\": "$date_modified", \"logsource\": "$logsource", \"query\": "$query" }"
+                    
+                    #echo "DATATEST: $data_test"
+
                     echo "data_entry: $data_entry"
 
                     # Add the data entry to the data array
