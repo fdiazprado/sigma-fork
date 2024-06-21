@@ -67,12 +67,16 @@ analyze_directories() {
                     status=$(yq e '.status' "$file_content")
                     severity=$(yq e '.level' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references' "$file_content" | jq --raw-output '. | tostring')
+                    references=$(yq e '.references | tojson' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
-                    logsource=$(yq e '.logsource' "$file_content" | jq --raw-output '. | tostring')
+                    logsource=$(yq e '.logsource | tojson' "$file_content")
                     
-                    # Invoke sigma-cli from bash
-                    query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f default "$file_content")
+
+
+                    
+
+                    #Invoke sigma-cli from bash
+                    query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f default $file_content)
                     
                     echo "title: $title"
                     echo "id: $id"
@@ -84,7 +88,7 @@ analyze_directories() {
                     echo "date_modified: $date_modified"
                     echo "logsource: $logsource"
                     echo "query: $query"
-                    
+
                     # Format the extracted fields into json object
                     data_entry=$(jq -n \
                         --arg title "$title" \
@@ -93,10 +97,10 @@ analyze_directories() {
                         --arg status "$status" \
                         --arg severity "$severity" \
                         --arg description "$description" \
-                        --argjson references "$references" \
-                        --arg date_modified "$date_modified" \
-                        --argjson logsource "$logsource" \
-                        --arg query "$query" \
+                        --argjson references: "$references" \
+                        --arg date_modified: "$date_mofidied" \
+                        --argjson logsource: "$logsource" \
+                        --arg query: "$query" \
                         '{ 
                            "title": $title, 
                            "id": $id, 
@@ -111,6 +115,11 @@ analyze_directories() {
                          }'
                     )
                     
+
+                    #data_test="{ \"title\": "$title", \"id\": "$id", \"author\": "$author", \"status\": "$status", \"description\": "$description", \"references\": "$references",\"date_modified\": "$date_modified", \"logsource\": "$logsource", \"query\": "$query" }"
+                    
+                    #echo "DATATEST: $data_test"
+
                     echo "data_entry: $data_entry"
 
                     # Add the data entry to the data array
