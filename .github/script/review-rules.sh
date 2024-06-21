@@ -107,7 +107,11 @@ analyze_directories() {
                            "author": $author, 
                            "status": $status, 
                            "severity": $severity, 
-                           "description": $description 
+                           "description": $description,
+                           "references": $references,
+                           "date_modified": $date_modified,
+                           "logsource": $logsource,
+                           "query": $query
                          }'
                     )
                     
