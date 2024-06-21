@@ -117,14 +117,17 @@ jobs:
         run: |
           cd sigma-fork/.github/script/
           data=$(cat out.txt)
+          echo "Data: $data"
           json_data=$(echo "$data" | sed '$!s/}$/},/')
       
           # Enclose all JSON objects within an array
           json_data="[${json_data}]"
+
+          echo "JSONNNN: $json_data"
       
           # Output the modified JSON data 
           
-          curl --verbose --request POST \
+          curl --request POST \
               --url https://serene-star-7723.tines.com/webhook/a8decde62d02ffae60a324f827cbde0b/fee9bbbeef472c09302e3c312ffd36bc \
               --header "Secret: ${{ secrets.TINES_API }}" \
               --header "Content-Type: application/json" \
