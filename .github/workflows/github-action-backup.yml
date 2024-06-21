@@ -115,7 +115,9 @@ jobs:
       - name: Print Out Content
         if: ${{ env.fileExist == 'true' }}
         run: |
+          ls
           cd sigma-fork/.github/script/
+          ls
           data=$(cat out.txt)
           echo "Data: $data"
           json_data=$(echo "$data" | sed '$!s/}$/},/')

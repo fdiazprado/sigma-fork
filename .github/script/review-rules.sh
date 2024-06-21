@@ -75,6 +75,7 @@ analyze_directories() {
 
                     #Invoke sigma-cli from bash
                     query=$(sigma convert -t lucene -p sysmon -p ecs_windows -f kibana_ndjson $file_content)
+                    echo "Query: $query" >&2
 
                     # Format the extracted fields into json object
                     data_entry=$(jq -n --arg title "$title" --arg id "$id" --arg author "$author"  --arg status "$status" --arg description "$description" --argjson references "$references" --arg date_modified "$date_modified"  --arg logsource "$logsource"  --argjson query "$query"'
