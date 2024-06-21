@@ -67,9 +67,9 @@ analyze_directories() {
                     status=$(yq e '.status' "$file_content")
                     severity=$(yq e '.level' "$file_content")
                     description=$(yq e '.description' "$file_content")
-                    references=$(yq e '.references' "$file_content" | jq -c '.' || echo '[]')  # Ensure references is an array if empty
+                    references=$(yq e '.references | tojson' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
-                    logsource=$(yq e '.logsource' "$file_content" | jq -c '.' || echo '{}') 
+                    logsource=$(yq e '.logsource | tojson' "$file_content") 
                     
 
 
