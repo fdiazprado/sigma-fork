@@ -41,7 +41,7 @@ analyze_directories() {
         # Use git log to grab the commit messages between starting and ending date
         # A quick method of getting exactly what we want without recursing the whole directories one by one
         echo "folder path: $folder_path" >&2
-        gitInfo=$(git -C "$TARGET_DIR" log --pretty=format: --name-only --since=$since_date --until=$current_datetime -- "$folder_path")
+        gitInfo=$(git -C "$TARGET_DIR" log --pretty=format: --name-only --since=$since_date --until=$current_datetime --diff-filter=AMT --perl-regexp --author='^(?!github-actions\[bot\]).*$' -- "$folder_path")
         
         # Loop through each dir (i.e. file path in commit messages found)
         for dir in $gitInfo; do
@@ -70,6 +70,7 @@ analyze_directories() {
                     references=$(yq e '.references | tojson' "$file_content")
                     date_modified=$(yq e '.modified' "$file_content")
                     logsource=$(yq e '.logsource | tojson' "$file_content") 
+                    tags=$(yq e '.logsource | tojson' "$file_content")
                     
 
 
@@ -88,6 +89,7 @@ analyze_directories() {
                     echo "date_modified: $date_modified"
                     echo "logsource: $logsource"
                     echo "query: $query"
+                    echo "tags: $tags"
 
                     # Format the extracted fields into json object
                     data_entry=$(jq -n \
@@ -101,6 +103,7 @@ analyze_directories() {
                         --arg date_modified "$date_modified" \
                         --argjson logsource "$logsource" \
                         --arg query "$query" \
+                        --arg tags "$tags" \
                         '{ 
                            "title": $title, 
                            "id": $id, 
@@ -111,7 +114,8 @@ analyze_directories() {
                            "references": $references,
                            "date_modified": $date_modified,
                            "logsource": $logsource,
-                           "query": $query
+                           "query": $query,
+                           "tags": $tags
                          }'
                     )
                     
