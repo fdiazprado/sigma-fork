@@ -19,7 +19,7 @@ analyze_directories() {
 
     # Set date times to limit the commit searching
     current_datetime=$(date -u +"%Y-%m-%d")
-    since_date=$(date -u -d "-30 days" +"%Y-%m-%d")
+    since_date=$(date -u -d "-1 days" +"%Y-%m-%d")
     echo "Date Now: $current_datetime" >&2
     echo "Date Since: $since_date" >&2
 
@@ -104,6 +104,7 @@ analyze_directories() {
                         --argjson logsource "$logsource" \
                         --arg query "$query" \
                         --arg tags "$tags" \
+                        --arg path "$file_content" \
                         '{ 
                            "title": $title, 
                            "id": $id, 
@@ -115,7 +116,8 @@ analyze_directories() {
                            "date_modified": $date_modified,
                            "logsource": $logsource,
                            "query": $query,
-                           "tags": $tags
+                           "tags": $tags,
+                           "path": $path
                          }'
                     )
                     
